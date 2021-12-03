@@ -144,6 +144,13 @@ class PerchMembers_Members extends PerchAPI_Factory
 
 
 		$sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'members WHERE memberPassword IS NOT NULL AND memberEmail='.$db->pdb($email);
+
+		$Session = PerchMembers_Session::fetch();
+
+		if ($Session->logged_in) {
+			$sql .= ' AND memberID!='.$db->pdb((int)$Session->get('id'));
+		}
+
     	$count = $db->get_count($sql);
 
     	if ($count===0) {
